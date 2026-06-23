@@ -56,10 +56,6 @@ void loop() {
     float distance = distanceSensor.measureDistanceCm();
     int currentdistance = (int)distance;
 
-    if (DEBUG_DISTANCES == 1) {
-        Serial.println(currentdistance);
-    }
-
     // Zustandsmaschine für die LED
     if (distance < MIN_DISTANCE) {
         state = STATE_TOOCLOSE;
@@ -69,6 +65,9 @@ void loop() {
     }
     else {
         state = STATE_PLAYING;
+        if (DEBUG_DISTANCES == 1) {
+            Serial.println(currentdistance);
+        }
     }
 
     // Display-Anzeige & HTTP-Übertragung (Strikt alle 250ms)
