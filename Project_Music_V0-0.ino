@@ -122,19 +122,23 @@ void sendCurrentToneHTTP(int toneDistance) {
     if (WiFi.status() == WL_CONNECTED) { 
         HTTPClient http;
 
-        // WICHTIG: Kurzes Timeout (150ms), damit der ESP32 nicht blockiert,
-        // falls der Server mal ein paar Millisekunden länger braucht!
-        http.setTimeout(150); 
+        // Extrem kurzes Timeout, da Node.js innerhalb von ~2-5ms antwortet
+        http.setTimeout(100); 
 
-        String url = "http://192.168.0.2/echo_get.php?string=" + String(toneDistance);
+        // Passt die IP hier an euren Node-Server an (z.B. Port 80 oder 3000)
+        String url = "http://192.168.0.2:80/echo_get.php?string=" + String(toneDistance);
         http.begin(url); 
+
+        // WICHTIGER HEADER: Sagt Node.js, dass die Verbindung sofort geschlossen werden kann
+        http.addHeader("Connection", "close");
 
         int httpResponseCode = http.GET();
         
         if (httpResponseCode > 0) {
-            Serial.printf("HTTP Code: %d | Stream: %d\n", httpResponseCode, toneDistance);
+            // Optionaler Log, im Live-Betrieb am besten auskommentieren für mehr Speed
+            // Serial.printf("HTTP: %d | Wert: %d\n", httpResponseCode, toneDistance);
         } else {
-            Serial.printf("Timeout/Fehler: %d bei Wert: %d\n", httpResponseCode, toneDistance);
+            Serial.printf("Fehler: %d bei Wert: %d\n", httpResponseCode, toneDistance);
         }
         
         http.end(); 
