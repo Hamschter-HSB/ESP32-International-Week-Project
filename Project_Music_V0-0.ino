@@ -19,6 +19,7 @@
 #define MIN_DISTANCE 5
 #define USE_HTTP 0
 #define USE_WIFI 0
+#define DEBUG_DISTANCES 1
 ///////////
 
 const byte triggerPin = 22;
@@ -54,6 +55,10 @@ void loop() {
     
     float distance = distanceSensor.measureDistanceCm();
     int currentdistance = (int)distance;
+
+    if (DEBUG_DISTANCES == 1) {
+        Serial.println(currentdistance);
+    }
 
     // Zustandsmaschine für die LED
     if (distance < MIN_DISTANCE) {
