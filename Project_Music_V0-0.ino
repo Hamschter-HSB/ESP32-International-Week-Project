@@ -17,9 +17,9 @@
 //// Config
 #define MAX_DISTANCE 50
 #define MIN_DISTANCE 5
-#define USE_HTTP 0
-#define USE_WIFI 0
-#define DEBUG_DISTANCES 1
+#define USE_HTTP 1
+#define USE_WIFI 1
+#define DEBUG_DISTANCES 0
 ///////////
 
 const byte triggerPin = 22;
@@ -126,7 +126,7 @@ void sendCurrentToneHTTP(int toneDistance) {
         http.setTimeout(100); 
 
         // Passt die IP hier an euren Node-Server an (z.B. Port 80 oder 3000)
-        String url = "http://192.168.0.2:80/echo_get.php?string=" + String(toneDistance);
+        String url = "http://192.168.0.107:12345/echo_get.php?string=" + String(toneDistance);
         http.begin(url); 
 
         // WICHTIGER HEADER: Sagt Node.js, dass die Verbindung sofort geschlossen werden kann
